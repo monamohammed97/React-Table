@@ -4,17 +4,11 @@ import "./App.css";
 import Table from "./Table";
 function App() {
   const [currentTable, setCurrentTable] = useState([]);
+  const [previousTable, setPreviousTable] = useState([]);
   const [titleBtn, setTitleBtn] = useState("Import Excel File");
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    const dataTableFromLocalStorage = localStorage.getItem("dataTable");
-    if (dataTableFromLocalStorage) {
-      setCurrentTable(JSON.parse(dataTableFromLocalStorage));
-      setTitleBtn("Import and Analyze");
-    }
-  }, []);
-
+  // upload file and read data
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -34,10 +28,19 @@ function App() {
     setTitleBtn("Import and Analyze");
   };
 
+  // handle click on title button instead of input
   const handleClick = () => {
     inputRef.current.click();
   };
 
+  // add data from localStorage if available
+  useEffect(() => {
+    const dataTableFromLocalStorage = localStorage.getItem("dataTable");
+    if (dataTableFromLocalStorage) {
+      setCurrentTable(JSON.parse(dataTableFromLocalStorage));
+      setTitleBtn("Import and Analyze");
+    }
+  }, []);
   return (
     <div className="container" style={{ padding: "20px" }}>
       <h3 className="cursor-pointer" onClick={handleClick}>
