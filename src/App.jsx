@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Table from "./Table";
-
+import "./App.css";
 function App() {
   const [currentTable, setCurrentTable] = useState([]);
   const [titleBtn, setTitleBtn] = useState("Import Excel File");
