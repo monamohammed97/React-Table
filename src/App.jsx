@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import Table from "./Table";
 
 function App() {
   const [currentTable, setCurrentTable] = useState([]);
