@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useTable, usePagination } from "react-table";
 import ArrowIcon from "./assets/ArrowIcon";
 import DoubleArrow from "./assets/DoubleArrow";
+import getCellStyle from "./utils/getCellStyle";
 
-function Table({ data }) {
-  const columns = React.useMemo(() => {
+function Table({ data, differences, isFirstUpload }) {
+  const columns = useMemo(() => {
     if (!data || data.length === 0) return [];
-
     return Object.keys(data[0]).map((key) => ({
       Header: key.charAt(0).toUpperCase() + key.slice(1),
       accessor: key,
@@ -36,7 +36,9 @@ function Table({ data }) {
     },
     usePagination
   );
+
   if (columns.length === 0) return <div>Upload file to display data ..</div>;
+
   return (
     <div className="table-container">
       <table
@@ -69,7 +71,15 @@ function Table({ data }) {
                   <td
                     {...cell.getCellProps()}
                     key={cell.column.id}
-                    style={{ padding: "8px" }}
+                    style={{
+                      padding: "8px",
+                      ...getCellStyle(
+                        row.index,
+                        cell.column.id,
+                        differences,
+                        isFirstUpload
+                      ),
+                    }}
                   >
                     {cell.render("Cell")}
                   </td>

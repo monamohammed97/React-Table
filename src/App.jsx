@@ -1,46 +1,145 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
-import "./App.css";
 import Table from "./Table";
-function App() {
-  const [currentTable, setCurrentTable] = useState([]);
-  const [previousTable, setPreviousTable] = useState([]);
-  const [titleBtn, setTitleBtn] = useState("Import Excel File");
-  const inputRef = useRef(null);
+import "./App.css";
+import compareTables from "./utils/compareTables";
 
-  // upload file and read data
+function App() {
+  // State to hold the current table data
+  const [currentTable, setCurrentTable] = useState([]);
+  // State to hold the differences between the old and new data
+  const [differences, setDifferences] = useState([]);
+  // State to hold the button title
+  const [titleBtn, setTitleBtn] = useState("Import Excel File");
+  // Ref to hold the file input element
+  const inputRef = useRef(null);
+  const [isFirstUpload, setIsFirstUpload] = useState(false);
+
+  // Function to handle file upload
+  // const handleFileUpload = (e) => {
+  //   // Check if a file is selected
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  //   const reader = new FileReader();
+  //   // Read the file as an array buffer
+  //   reader.onload = (evt) => {
+  //     const data = evt.target.result;
+  //     // Parse the Excel file using XLSX library
+  //     const workbook = XLSX.read(data, { type: "array" });
+  //     // Get the first sheet and convert it to JSON
+  //     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+  //     // Convert the sheet to JSON format, Set default value to empty string for all cells {"defval: ""}
+  //     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+  //     // get the old data from local storage
+  //     const oldData = JSON.parse(localStorage.getItem("dataTable")) || [];
+  //     // Check if the file is being uploaded for the first time
+  //     const isFirst = oldData.length === 0;
+  //     setIsFirstUpload(isFirst);
+
+  //     // Compare the old and new data and get the differences
+  //     const diffs = compareTables(oldData, jsonData);
+  //     // Set the differences to state
+  //     setDifferences(diffs);
+
+  //     // Update the current table with the new data
+  //     // Merge the new data with the old data
+  //     diffs.forEach(({ rowIndex, changes }) => {
+  //       Object.entries(changes).forEach(([key, { new: newValue }]) => {
+  //         if (!jsonData[rowIndex]) jsonData[rowIndex] = {};
+  //         jsonData[rowIndex][key] = newValue;
+  //       });
+  //     });
+
+  //     // Update the current table with the new data
+  //     setCurrentTable(jsonData);
+  //     localStorage.setItem("dataTable", JSON.stringify(jsonData));
+  //   };
+
+  //   // Reset the file input value to allow re-uploading the same file
+  //   e.target.value = null;
+  //   reader.readAsArrayBuffer(file);
+  //   setTitleBtn("Import and Analyze");
+  // }
+
+  // Function to handle file upload
   const handleFileUpload = (e) => {
+    // Check if a file is selected
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
+    // Read the file as an array buffer
     reader.onload = (evt) => {
       const data = evt.target.result;
+      // Parse the Excel file using XLSX library
       const workbook = XLSX.read(data, { type: "array" });
+      // Get the first sheet and convert it to JSON
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+      // Convert the sheet to JSON format, Set default value to empty string for all cells {"defval: ""}
+      let jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+      // get the old data from local storage
+      const oldData = JSON.parse(localStorage.getItem("dataTable")) || [];
+      // Check if the file is being uploaded for the first time
+      const isFirst = oldData.length === 0;
+      setIsFirstUpload(isFirst);
+      // Compare the old and new data and get the differences
+      const diffs = compareTables(oldData, jsonData);
+      // Set the differences to state
+      setDifferences(diffs);
+
+      // Update the current table with the new data
+      // Merge the new data with the old data
+      diffs.forEach(({ rowIndex, changes }) => {
+        Object.entries(changes).forEach(([key, { new: newValue }]) => {
+          if (!jsonData[rowIndex]) jsonData[rowIndex] = {};
+          jsonData[rowIndex][key] = newValue;
+        });
+      });
+
+      // delete empty rows
+      jsonData = jsonData.filter((row) =>
+        Object.values(row).some(
+          (cell) => cell !== "" && cell !== null && cell !== undefined
+        )
+      );
+
+      // delete empty columns
+      const allKeys = Object.keys(jsonData[0] || {});
+      const columnsToDelete = allKeys.filter((col) =>
+        jsonData.every(
+          (row) =>
+            row[col] === "" || row[col] === null || row[col] === undefined
+        )
+      );
+      jsonData = jsonData.map((row) => {
+        columnsToDelete.forEach((col) => delete row[col]);
+        return row;
+      });
+      // Update the current table with the new dataF
       setCurrentTable(jsonData);
       localStorage.setItem("dataTable", JSON.stringify(jsonData));
     };
+    // Reset the file input value to allow re-uploading the same file
     e.target.value = null;
-
     reader.readAsArrayBuffer(file);
     setTitleBtn("Import and Analyze");
   };
 
-  // handle click on title button instead of input
   const handleClick = () => {
     inputRef.current.click();
   };
 
-  // add data from localStorage if available
+  // Effect to check if there is data in local storage
   useEffect(() => {
     const dataTableFromLocalStorage = localStorage.getItem("dataTable");
     if (dataTableFromLocalStorage) {
-      setCurrentTable(JSON.parse(dataTableFromLocalStorage));
+      const parsed = JSON.parse(dataTableFromLocalStorage);
+      setCurrentTable(parsed);
       setTitleBtn("Import and Analyze");
     }
   }, []);
+
   return (
     <div className="container" style={{ padding: "20px" }}>
       <h3 className="cursor-pointer" onClick={handleClick}>
@@ -53,7 +152,11 @@ function App() {
         style={{ display: "none" }}
         onChange={handleFileUpload}
       />
-      <Table data={currentTable} />
+      <Table
+        data={currentTable}
+        differences={differences}
+        isFirstUpload={isFirstUpload}
+      />
     </div>
   );
 }
