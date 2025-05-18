@@ -16,53 +16,6 @@ function App() {
   const [isFirstUpload, setIsFirstUpload] = useState(false);
 
   // Function to handle file upload
-  // const handleFileUpload = (e) => {
-  //   // Check if a file is selected
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-  //   const reader = new FileReader();
-  //   // Read the file as an array buffer
-  //   reader.onload = (evt) => {
-  //     const data = evt.target.result;
-  //     // Parse the Excel file using XLSX library
-  //     const workbook = XLSX.read(data, { type: "array" });
-  //     // Get the first sheet and convert it to JSON
-  //     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-  //     // Convert the sheet to JSON format, Set default value to empty string for all cells {"defval: ""}
-  //     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-  //     // get the old data from local storage
-  //     const oldData = JSON.parse(localStorage.getItem("dataTable")) || [];
-  //     // Check if the file is being uploaded for the first time
-  //     const isFirst = oldData.length === 0;
-  //     setIsFirstUpload(isFirst);
-
-  //     // Compare the old and new data and get the differences
-  //     const diffs = compareTables(oldData, jsonData);
-  //     // Set the differences to state
-  //     setDifferences(diffs);
-
-  //     // Update the current table with the new data
-  //     // Merge the new data with the old data
-  //     diffs.forEach(({ rowIndex, changes }) => {
-  //       Object.entries(changes).forEach(([key, { new: newValue }]) => {
-  //         if (!jsonData[rowIndex]) jsonData[rowIndex] = {};
-  //         jsonData[rowIndex][key] = newValue;
-  //       });
-  //     });
-
-  //     // Update the current table with the new data
-  //     setCurrentTable(jsonData);
-  //     localStorage.setItem("dataTable", JSON.stringify(jsonData));
-  //   };
-
-  //   // Reset the file input value to allow re-uploading the same file
-  //   e.target.value = null;
-  //   reader.readAsArrayBuffer(file);
-  //   setTitleBtn("Import and Analyze");
-  // }
-
-  // Function to handle file upload
   const handleFileUpload = (e) => {
     // Check if a file is selected
     const file = e.target.files[0];
