@@ -3,8 +3,9 @@ import { useTable, usePagination } from "react-table";
 import ArrowIcon from "./assets/ArrowIcon";
 import DoubleArrow from "./assets/DoubleArrow";
 import getCellStyle from "./utils/getCellStyle";
+import exportExcel from "./utils/exportExcel";
 
-function Table({ data, differences, isFirstUpload }) {
+function Table({ data, differences, isFirstUpload, fileName }) {
   const columns = useMemo(() => {
     if (!data || data.length === 0) return [];
     return Object.keys(data[0]).map((key) => ({
@@ -92,6 +93,12 @@ function Table({ data, differences, isFirstUpload }) {
 
       {/* Pagination Controls */}
       <div className="container-pagination">
+        <button
+          className="btn-export"
+          onClick={() => exportExcel(data, fileName)}
+        >
+          Export File
+        </button>
         <div className="pagination">
           <button
             className="btn-page rotate"
