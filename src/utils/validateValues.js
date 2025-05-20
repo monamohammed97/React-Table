@@ -14,19 +14,20 @@ function validateValues(data, guessedTypes) {
     const invalidRows = [];
     data.forEach((row, idx) => {
       const val = row[col];
+
       if (val === "" || val === null || val === undefined) return;
 
       if (type === "number") {
         if (isNaN(Number(val))) {
-          invalidRows.push({ rowIndex: idx + 1, value: val });
+          invalidRows.push({ rowIndex: idx + 1, value: val, id: row["id"] });
         }
       } else if (type === "date") {
         if (!isDate(val)) {
-          invalidRows.push({ rowIndex: idx + 1, value: val });
+          invalidRows.push({ rowIndex: idx + 1, value: val, id: row["id"] });
         }
       } else if (type == "email") {
         if (!isEmail(val)) {
-          invalidRows.push({ rowIndex: idx + 1, value: val });
+          invalidRows.push({ rowIndex: idx + 1, value: val, id: row["id"] });
         }
       }
     });

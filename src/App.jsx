@@ -20,6 +20,7 @@ function App() {
   const [isFirstUpload, setIsFirstUpload] = useState(false);
   const [isCheckFile, setCheckFile] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [isUpdated, setIsUpdated] = useState(false);
 
   // State to hold validation errors
   const [invalidNumericColumns, setInvalidNumericColumns] = useState([]);
@@ -79,11 +80,35 @@ function App() {
     reader.readAsArrayBuffer(file);
     setTitleBtn("Import and Analyze");
   };
+  const handleUpdate = ({ id, column, value }) => {
+    if (!pendingData) return;
+
+    const updatedPending = pendingData.map((row) => {
+      if (row.id === id) {
+        return { ...row, [column]: value };
+      }
+      return row;
+    });
+
+    setPendingData(updatedPending);
+
+    const guessedTypes = guessColumnTypes(updatedPending);
+    const invalids = validateValues(updatedPending, guessedTypes);
+    setInvalidNumericColumns(invalids);
+  };
 
   const handleClick = () => {
     inputRef.current.click();
   };
   function processValidData(jsonData) {
+    const hasIdColumn = jsonData.some((row) => "id" in row);
+
+    if (!hasIdColumn) {
+      jsonData = jsonData.map((row, index) => ({
+        id: index + 1,
+        ...row,
+      }));
+    }
     // get the old data from local storage
     const oldData = JSON.parse(localStorage.getItem("dataTable")) || [];
     // Check if the file is being uploaded for the first time
@@ -159,15 +184,27 @@ function App() {
       {isCheckFile && <Modal toggleModal={(e) => setCheckFile(false)} />}
       {showValidationModal && (
         <ValidationModal
+          columnTypes={guessColumnTypes(currentTable)}
+          isUpdated={isUpdated}
+          handleUpdate={handleUpdate}
+          handleShowUpdate={(value) => {
+            setIsUpdated(!!value);
+          }}
           errors={invalidNumericColumns}
           onConfirm={() => {
             setShowValidationModal(false);
             processValidData(pendingData);
             setPendingData(null);
+            setIsUpdated(false);
           }}
           onReject={() => {
             setShowValidationModal(false);
             setPendingData(null);
+            setIsUpdated(false);
+          }}
+          toggleModal={() => {
+            setShowValidationModal(false);
+            setIsUpdated(false);
           }}
         />
       )}
