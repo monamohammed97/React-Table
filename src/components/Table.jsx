@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import { useTable, usePagination } from "react-table";
-import ArrowIcon from "./assets/ArrowIcon";
-import DoubleArrow from "./assets/DoubleArrow";
-import getCellStyle from "./utils/getCellStyle";
-import exportExcel from "./utils/exportExcel";
+import ArrowIcon from "../assets/ArrowIcon";
+import DoubleArrow from "../assets/DoubleArrow";
+import getCellStyle from "../utils/getCellStyle";
+import exportExcel from "../utils/exportExcel";
 
 function Table({ data, differences, isFirstUpload, fileName }) {
   const columns = useMemo(() => {

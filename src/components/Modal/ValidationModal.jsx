@@ -1,4 +1,6 @@
 import { useState } from "react";
+import getInputType from "../../utils/getInputType";
+import validateInput from "../../utils/validateInput";
 
 export default function ValidationModal({
   errors = [],
@@ -14,32 +16,8 @@ export default function ValidationModal({
   const [idRow, setIdRow] = useState({ id: null, column: "" });
   const [inputError, setInputError] = useState("");
 
-  function getInputType(column) {
-    if (!column) return "text";
-    const type = columnTypes[column];
-    if (type === "number") return "number";
-    if (type === "email") return "email";
-    if (type === "date") return "date";
-    return "text";
-  }
-
-  function validateInput(value, type) {
-    if (!value) return "Value cannot be empty";
-
-    if (type === "email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) return "Invalid email format";
-    } else if (type === "number") {
-      if (isNaN(value)) return "Must be a number";
-    } else if (type === "date") {
-      const date = new Date(value);
-      if (isNaN(date.getTime())) return "Invalid date format";
-    }
-    return "";
-  }
-
   const handleAcceptEdit = () => {
-    const inputType = getInputType(idRow.column);
+    const inputType = getInputType(idRow.column, columnTypes);
     const error = validateInput(inputValue, inputType);
     if (error) {
       setInputError(error);
@@ -63,7 +41,7 @@ export default function ValidationModal({
     <div className="modal-container" onClick={toggleModal}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h4 className="pb-30">Validation Errors</h4>
-        <ul style={{ listStyle: "none" }}>
+        <ul className="listUpdate">
           {errors.length > 0
             ? errors.length === 1
               ? "Review this column:"
@@ -75,7 +53,7 @@ export default function ValidationModal({
                 <strong>Column:</strong> {err.column}
                 <ul>
                   {err.invalidRows.map(({ rowIndex, value, id }, idx) => {
-                    const inputType = getInputType(err.column);
+                    const inputType = getInputType(err.column, columnTypes);
                     const isEditing =
                       isUpdated &&
                       idRow.id === id &&
