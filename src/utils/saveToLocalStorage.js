@@ -1,22 +1,26 @@
 export default function saveToLocalStorage(data, selectedDuration) {
+  const selectedDurationLower = selectedDuration.toLowerCase();
   const now = new Date();
   const duration = {
-    Hour: 120000,
-    Week: 7 * 24 * 60 * 60 * 1000,
-    Month: 30 * 24 * 60 * 60 * 1000,
-    Year: 365 * 24 * 60 * 60 * 1000,
+    hour: 120000,
+    week: 7 * 24 * 60 * 60 * 1000,
+    month: 30 * 24 * 60 * 60 * 1000,
+    year: 365 * 24 * 60 * 60 * 1000,
   };
 
-  if (selectedDuration === "Don't Save" || selectedDuration === "Save Data") {
+  if (
+    data.length == 0 ||
+    selectedDurationLower === "don't save" ||
+    selectedDurationLower === "save data"
+  ) {
     localStorage.removeItem("dataTable");
     localStorage.removeItem("expiry");
-
     return;
   }
 
-  const timeS = duration[selectedDuration];
+  const timeS = duration[selectedDurationLower];
   if (!timeS) {
-    localStorage.removeItem(key);
+    localStorage.removeItem("dataTable");
     return;
   }
 

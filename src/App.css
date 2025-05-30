@@ -12,7 +12,7 @@ body {
 .cursor-pointer {
   cursor: pointer;
   padding: 10px 20px;
-  background-color: #393A62;
+  background-color: var(--main-color);
   color: #F1F1F1;
   border-radius: 30px;
   width: fit-content;
@@ -32,7 +32,7 @@ table th:last-child {
 
 table th {
   padding: 24px 10px;
-  background-color: #393A62;
+  background-color: var(--main-color);
   color: #F1F1F1;
 }
 
@@ -45,26 +45,50 @@ table td {
   border: none;
 }
 
-h3 {
-  margin: 30px 0;
-}
-
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  align-items: start;
   position: relative;
+  width: calc(100% - 220px);
+  padding: 1rem 2rem;
+  height: 100vh;
+  transition: width 0.3s ease;
+  justify-content: flex-start;
+  /* min-width: calc(100% - 60px); */
+  margin-left: 220px;
+  overflow-y: auto;
+}
+
+.t-container {
+  overflow-x: auto;
+  width: 100%;
 }
 
 .table-container {
   min-width: 600px;
+  width: 100%;
+
+  .actions-box {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+
+    button {
+      color: #F1F1F1;
+      font-size: 12px;
+
+    }
+  }
 }
 
 .select-page:focus,
 .select-page {
   margin-left: 10px;
-  background: #393A62;
+  background: var(--main-color);
   padding: 8px;
   border-radius: 20px;
   border: none;
@@ -106,7 +130,7 @@ tbody {
 }
 
 .modal {
-  background-color: #393A62;
+  background-color: var(--main-color);
   padding: 24px;
   border-radius: 20px;
   min-width: 300px;
@@ -114,14 +138,15 @@ tbody {
 }
 
 .modal-container {
-  background: #393a6240;
+  background: #edd1ff80;
   position: absolute;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  left: 0;
   color: white
 }
 
@@ -141,7 +166,7 @@ tbody {
 .btn-export {
   outline: none;
   border: none;
-  background-color: #393A62;
+  background-color: var(--main-color);
   color: white;
   padding: 0 20px;
   height: 40px;
@@ -174,7 +199,7 @@ li::marker {
 
 li.paragraph li {
   background: white;
-  color: #393A62;
+  color: var(--main-color);
   border-radius: 7px;
   padding: 10px;
   margin: 10px 0;
@@ -183,14 +208,14 @@ li.paragraph li {
   align-items: center;
 
   button {
-    border: 1px solid #393A62;
+    border: 1px solid var(--main-color);
     padding: 8px 16px;
     font-size: 14px;
   }
 
   input:focus,
   input {
-    border: 1px solid #393A62;
+    border: 1px solid var(--main-color);
     border-radius: 5px;
     max-width: 100px;
     outline: none;
@@ -215,7 +240,7 @@ li.paragraph li {
 }
 
 .title-box-dropdown {
-  background-color: #393A62;
+  background-color: var(--main-color);
   padding: 10px 20px;
   border-radius: 25px;
   position: relative;
@@ -225,14 +250,16 @@ li.paragraph li {
   ul {
     position: absolute;
     top: 40px;
-    background: #393A62;
+    background: var(--main-color);
     width: 100%;
     left: 0;
   }
 }
 
 .title-box {
-  min-width: 600px;
+  /* min-width: 600px; */
+  width: 100%;
+  margin-bottom: 20px;
 
   span svg:first-child {
     rotate: 90deg;
@@ -273,7 +300,7 @@ li.paragraph li {
   background: white;
   padding: 5px;
   border-radius: 5px;
-  color: #393A62;
+  color: var(--main-color);
 }
 
 .red-time {
@@ -303,6 +330,7 @@ li.paragraph li {
 
 ::-webkit-scrollbar {
   width: 2px;
+  height: 4px;
 }
 
 /* Track */
@@ -313,34 +341,218 @@ li.paragraph li {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(255, 208, 1);
+  background: rgb(206, 206, 206);
   border-radius: 10px;
 }
 
-@media (max-width:400px) {
+.weather-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.weather-info {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 10px 20px;
+  border-radius: 25px;
+  color: var(--main-color);
+  position: relative;
+  box-shadow: 1px 3px 6px #ddd;
+
   h3 {
+    margin: 20px 0;
+  }
+}
+
+.weather-icon {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  right: 0;
+  top: -100px;
+}
+
+.form-container {
+  padding: 30px;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(to right, var(--secondary-color), var(--main-color));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .form-content {
+    width: 80%;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    min-height: fit-content;
+  }
+
+  form {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    justify-content: center;
+
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]) :focus,
+  input:not([type="checkbox"]):not([type="radio"]) {
+    background: var(--secondary-color);
+    border: 0;
+    padding: 10px;
+    height: 50px;
+    border-radius: 6px;
+    color: var(--main-color);
+    margin-bottom: 20px;
+    outline: 0;
+    border-bottom: 1px solid var(--main-color);
     font-size: 16px;
+    width: 100%;
   }
 
-  .table-container {
-    min-width: 100%;
-    overflow-x: auto;
+  input:focus {
+    background-color: rgb(233 233 233)
   }
 
-  table th {
-    font-size: 14px
+  input[type="checkbox"] {
+    outline: none;
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
   }
 
-  table td {
-    font-size: 12px;
+  input[type="checkbox"]:checked {
+    accent-color: var(--main-color);
   }
 
-  span {
-    font-size: 10px;
+  button {
+    background-color: var(--main-color);
+    color: white;
+    outline: 0;
+    height: 50px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 10px;
   }
 
-  .btn-page {
-    width: 20px;
-    height: 20px;
+
+  button:hover {
+    background: linear-gradient(135deg, var(--main-color), #7b28c9);
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(147, 51, 234, 0.5);
+  }
+
+  .form-image {
+    width: 60%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  }
+
+  .login-link {
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+
+    svg {
+      rotate: 270deg;
+      cursor: pointer;
+    }
+
+    &:hover .box {
+      animation: sway 1.5s ease-in-out infinite;
+    }
+  }
+
+  .login-link:hover {
+    color: #7b28c9;
+  }
+
+  p {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .p-relative {
+    svg {
+      cursor: pointer;
+      position: absolute;
+      bottom: 50%;
+      right: 10px;
+      mask-image: linear-gradient(-75deg,
+          rgba(0, 0, 0, 0.2) 30%,
+          rgba(0, 0, 0, 1) 50%,
+          rgba(0, 0, 0, 0.2) 70%);
+      mask-size: 200%;
+      animation: shine 1.5s ease-in-out infinite;
+    }
+  }
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.flex-input {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.mb-1 {
+  margin-bottom: 10px;
+}
+
+.p-relative {
+  position: relative;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+@keyframes shine {
+  0% {
+    mask-position: 150%;
+  }
+
+  100% {
+    mask-position: -50%;
+  }
+}
+
+@keyframes sway {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-10px);
   }
 }

@@ -2,6 +2,7 @@ import Login from "../pages/Login";
 import TablePage from "../pages/TablePage";
 import Weather from "../pages/Weather";
 import Chart from "../pages/admin/Chart";
+import Setting from "../pages/admin/Setting";
 import ProfileDetails from "../pages/user/ProfileDetails";
 
 export const publicRoutes = [
@@ -28,6 +29,11 @@ export const adminRoutes = [
   {
     path: "/admin/chart",
     element: Chart,
+    allowedRoles: ["admin"],
+  },
+  {
+    path: "/admin/setting",
+    element: Setting,
     allowedRoles: ["admin"],
   },
 ];

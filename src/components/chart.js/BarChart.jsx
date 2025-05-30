@@ -34,7 +34,7 @@ const data = {
     {
       label: "Number of Users",
       data: [12, 19, 3, 5, 2, 3, 7],
-      backgroundColor: "rgba(53, 162, 235, 0.7)",
+      backgroundColor: "#4a0a6f",
     },
   ],
 };

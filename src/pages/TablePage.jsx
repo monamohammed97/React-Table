@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import Table from "../components/Table";
 import compareTables from "../utils/compareTables";
@@ -11,6 +11,8 @@ import saveToLocalStorage from "../utils/saveToLocalStorage";
 import getDataFromLocal from "../utils/getDataFromLocal";
 import ModalTime from "../components/Modal/ModalTime";
 import TrashIcon from "../assets/TrashIcon";
+import Title from "../components/Title";
+import { classifyRemainingTime } from "../utils/classifyRemainingTime";
 
 function TablePage() {
   // State to hold the current table data
@@ -166,6 +168,34 @@ function TablePage() {
     setCurrentTable(jsonData);
     saveToLocalStorage(jsonData, activeItem);
   }
+
+  const handleEdit = useCallback((rowData) => {
+    console.log("Edit clicked:", rowData);
+    // const dataAfterEdit = dataTable.filter((item)=>{
+
+    // })
+  }, []);
+
+  const handleDelete = useCallback(
+    (rowData) => {
+      if (!rowData?.id) {
+        return;
+      }
+
+      const dataAfterDelete = currentTable.filter(
+        (item) => item?.id !== rowData.id
+      );
+
+      setCurrentTable(dataAfterDelete);
+      if (dataAfterDelete.length == 0) {
+        setActiveItem("Don't Save");
+        setRemainingTime(null);
+      }
+      saveToLocalStorage(dataAfterDelete, activeItem);
+    },
+    [currentTable, activeItem, setCurrentTable, saveToLocalStorage]
+  );
+
   // Effect to check if there is data in local storage
   useEffect(() => {
     const interval = setInterval(() => {
@@ -214,13 +244,19 @@ function TablePage() {
       clearInterval(interval);
     };
   }, [activeItem]);
-  
+
   useEffect(() => {
     const stored = getDataFromLocal("dataTable");
     if (stored) {
       setCurrentTable(stored);
       setTitleBtn("Import and Analyze");
     }
+  }, []);
+
+  useEffect(() => {
+    const time = localStorage.getItem("expiry");
+    const nowTime = classifyRemainingTime(Number(time));
+    setActiveItem(nowTime);
   }, []);
 
   useEffect(() => {
@@ -233,96 +269,99 @@ function TablePage() {
   }, [activeItem]);
   return (
     <>
-      <div className="container" style={{ padding: "20px" }}>
-        {remainingTime && activeItem !== "Don't Save" && (
-          <div className={`remaining-time ${redTime} `}>
-            <strong>{remainingTime}</strong>
-          </div>
-        )}
-        <div className="flex title-box">
-          <h3 className="cursor-pointer" onClick={handleClick}>
-            {titleBtn}
-          </h3>
-          <div className="flex">
-            {currentTable.length > 0 && (
-              <>
-                <div
-                  className={`flex title-box-dropdown ${
-                    showDropDown && "border-0"
-                  }`}
-                  onClick={() => setShowDropDown(!showDropDown)}
-                >
-                  <span className="active">{activeItem}</span>
-                  <span style={{ display: "flex", marginLeft: "10px" }}>
-                    <ArrowIcon />
-                  </span>
-                  {showDropDown && (
-                    <ul>
-                      <li
-                        onClick={(e) => {
-                          setActiveItem(e.target.innerText);
-                        }}
-                      >
-                        Don't Save
-                      </li>
-                      <li
-                        onClick={(e) => {
-                          setActiveItem(e.target.innerText);
-                        }}
-                      >
-                        Hour
-                      </li>
-                      <li
-                        onClick={(e) => {
-                          setActiveItem(e.target.innerText);
-                        }}
-                      >
-                        Week
-                      </li>
-                      <li
-                        onClick={(e) => {
-                          setActiveItem(e.target.innerText);
-                        }}
-                      >
-                        Month
-                      </li>
-                      <li
-                        onClick={(e) => {
-                          setActiveItem(e.target.innerText);
-                        }}
-                      >
-                        Year
-                      </li>
-                    </ul>
-                  )}
-                </div>
-                <div
-                  className="rotate-animation"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    localStorage.removeItem("dataTable");
-                    localStorage.removeItem("expiry");
-                    window.location.reload();
-                  }}
-                >
-                  <TrashIcon />
-                </div>
-              </>
-            )}
-          </div>
+      <Title>Import and Export Excel File</Title>
+      {remainingTime && activeItem !== "Don't Save" && (
+        <div className={`remaining-time ${redTime} `}>
+          <strong>{remainingTime}</strong>
         </div>
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".xlsx, .xls"
-          style={{ display: "none" }}
-          onChange={handleFileUpload}
-        />
+      )}
+      <div className="flex title-box">
+        <h3 className="cursor-pointer" onClick={handleClick}>
+          {titleBtn}
+        </h3>
+        <div className="flex">
+          {currentTable.length > 0 && (
+            <>
+              <div
+                className={`flex title-box-dropdown ${
+                  showDropDown && "border-0"
+                }`}
+                onClick={() => setShowDropDown(!showDropDown)}
+              >
+                <span className="active">{activeItem}</span>
+                <span style={{ display: "flex", marginLeft: "10px" }}>
+                  <ArrowIcon />
+                </span>
+                {showDropDown && (
+                  <ul>
+                    <li
+                      onClick={(e) => {
+                        setActiveItem(e.target.innerText);
+                      }}
+                    >
+                      Don't Save
+                    </li>
+                    <li
+                      onClick={(e) => {
+                        setActiveItem(e.target.innerText);
+                      }}
+                    >
+                      Hour
+                    </li>
+                    <li
+                      onClick={(e) => {
+                        setActiveItem(e.target.innerText);
+                      }}
+                    >
+                      Week
+                    </li>
+                    <li
+                      onClick={(e) => {
+                        setActiveItem(e.target.innerText);
+                      }}
+                    >
+                      Month
+                    </li>
+                    <li
+                      onClick={(e) => {
+                        setActiveItem(e.target.innerText);
+                      }}
+                    >
+                      Year
+                    </li>
+                  </ul>
+                )}
+              </div>
+              <div
+                className="rotate-animation"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  localStorage.removeItem("dataTable");
+                  localStorage.removeItem("expiry");
+                  window.location.reload();
+                }}
+              >
+                <TrashIcon />
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".xlsx, .xls"
+        style={{ display: "none" }}
+        onChange={handleFileUpload}
+      />
+      <div className="t-container">
         <Table
           data={currentTable}
           differences={differences}
           isFirstUpload={isFirstUpload}
           fileName={fileName}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
         />
       </div>
       {isCheckFile && <Modal toggleModal={() => setCheckFile(false)} />}

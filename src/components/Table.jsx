@@ -1,18 +1,54 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useTable, usePagination } from "react-table";
 import ArrowIcon from "../assets/ArrowIcon";
 import DoubleArrow from "../assets/DoubleArrow";
 import getCellStyle from "../utils/getCellStyle";
 import exportExcel from "../utils/exportExcel";
 
-function Table({ data, differences, isFirstUpload, fileName }) {
+function Table({
+  data,
+  differences,
+  isFirstUpload,
+  fileName,
+  handleEdit,
+  handleDelete,
+}) {
+ 
+  const ActionButtons = React.memo(({ rowData, onEdit, onDelete }) => {
+    return (
+      <div className="actions-box">
+        {/* <button className="accepted" onClick={() => onEdit(rowData)}>
+          Edit
+        </button> */}
+        <button className="rejected" onClick={() => onDelete(rowData)}>
+          Delete
+        </button>
+      </div>
+    );
+  });
+
   const columns = useMemo(() => {
     if (!data || data.length === 0) return [];
-    return Object.keys(data[0]).map((key) => ({
+
+    const baseColumns = Object.keys(data[0]).map((key) => ({
       Header: key.charAt(0).toUpperCase() + key.slice(1),
       accessor: key,
     }));
-  }, [data]);
+
+    const actionColumn = {
+      Header: "Actions",
+      id: "actions",
+      Cell: ({ row }) => (
+        <ActionButtons
+          rowData={row.original}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      ),
+    };
+
+    return [...baseColumns, actionColumn];
+  }, [data, handleEdit, handleDelete]);
 
   const {
     getTableProps,
@@ -38,7 +74,8 @@ function Table({ data, differences, isFirstUpload, fileName }) {
     usePagination
   );
 
-  if (columns.length === 0) return <div>Upload file to display data ..</div>;
+  if (columns.length === 0)
+    return <p className="flex">Upload file to display data ..</p>;
 
   return (
     <div className="table-container">

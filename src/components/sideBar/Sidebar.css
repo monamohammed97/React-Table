@@ -1,12 +1,18 @@
 .sidebar {
-  width: 200px;
-  background-color: #222;
+  width: 220px;
+  transition: width 0.3s ease;
+  background-color: var(--main-color);
   color: white;
-  height: 100vh;
+  height: 100%;
   padding: 1rem;
-  position: fixed;
-  top: 0;
-  left: 0;
+  text-align: left;
+  position: absolute;
+
+  nav {
+    height: 85%;
+    overflow-y: auto;
+    margin: 10px 0;
+  }
 }
 
 .sidebar ul {
@@ -16,15 +22,94 @@
 
 .sidebar li {
   margin: 1rem 0;
+  text-align: justify;
 }
 
 .sidebar a {
   color: #bbb;
   text-decoration: none;
   font-weight: 500;
+  transition: all 0.1s ease;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+
+  &:hover {
+    color: white;
+    font-weight: 700 !important;
+  }
 }
+
 
 .sidebar a.active {
   color: white;
   font-weight: 700;
+}
+
+.logout {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: center;
+
+  button {
+    color: var(--main-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+
+    &:hover {
+      background-color: var(--main-color);
+      color: white;
+      border: 1px solid white;
+      transition: all 0.3s ease;
+    }
+  }
+}
+
+.collapsed {
+  width: 60px;
+
+  span {
+    display: none;
+  }
+
+  ul li a {
+    display: flex;
+    justify-content: center;
+  }
+
+  h3 {
+    text-align: center;
+  }
+}
+
+.main-layout aside.collapsed+.container {
+  width: calc(100% - 60px);
+  margin-left: 60px;
+}
+
+.arrow-side {
+  position: absolute;
+  background: var(--secondary-color);
+  top: 60px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 5px;
+  rotate: 270deg;
+  color: var(--main-color);
+  cursor: pointer;
+  z-index: 1;
 }

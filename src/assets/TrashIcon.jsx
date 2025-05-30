@@ -1,4 +1,4 @@
-const TrashIcon = ({ width = 30, height = 30, color = "#393A62" }) => (
+const TrashIcon = ({ width = 30, height = 30, color = "var(--main-color)" }) => (
   <svg
     width={width}
     height={height}

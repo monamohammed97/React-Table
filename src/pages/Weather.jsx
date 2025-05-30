@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Title from "../components/Title";
+import Loader from "../components/loader/Loader";
 
 export default function WeatherByCurrentLocation() {
   const [weather, setWeather] = useState(null);
-  console.log("🚀 ~ WeatherByCurrentLocation ~ weather:", weather);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -38,26 +39,35 @@ export default function WeatherByCurrentLocation() {
   }, []);
 
   return (
-    <div>
-      <h1>Weather by Current Location</h1>
+    <>
+      <Title>Weather by Current Location</Title>
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div className="weather-container">
+        {loading && <Loader />}
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {weather && (
-        <div>
-          <h2>
-            {weather.name}, {weather.sys.country}
-          </h2>
-          <p>Temperature: {weather.main.temp} °C</p>
-          <p>Weather: {weather.weather[0].description}</p>
-          <p>Humidity: {weather.main.humidity}%</p>
-          <img
-            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-            alt="icon"
-          />
-        </div>
-      )}
-    </div>
+        {weather && (
+          <div className="weather-info">
+            <h3>
+              {weather.name}, {weather.sys.country}
+            </h3>
+            <p>
+              Temperature:<strong> {weather.main.temp}</strong> °C
+            </p>
+            <p>
+              Weather: <strong>{weather.weather[0].description}</strong>
+            </p>
+            <p>
+              Humidity: <strong>{weather.main.humidity}</strong>%
+            </p>
+            <img
+              className="weather-icon"
+              src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+              alt="icon"
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 }
