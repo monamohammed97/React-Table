@@ -1,0 +1,162 @@
+@media (max-width:1799.98px) {}
+
+@media (max-width:1599.98px) {}
+
+@media (max-width:1399.98px) {}
+
+@media (max-width:1199.98px) {
+    .form-container {
+        .form-content {
+            width: 90%;
+        }
+    }
+}
+
+@media (max-width:991.98px) {
+
+    .form-container {
+        form {
+            width: 50%;
+        }
+
+        .form-image {
+            width: 60%;
+        }
+
+        .p-relative svg {
+            width: 20px;
+        }
+
+        .login-link {
+            svg {
+                height: 18px;
+            }
+        }
+
+        input:not([type="checkbox"]):not([type="radio"]) :focus,
+        input:not([type="checkbox"]):not([type="radio"]),
+        button {
+            height: 40px;
+            font-size: 14px;
+            padding: 4px 10px;
+        }
+
+        label,
+        .login-link {
+            font-size: 13px;
+        }
+    }
+}
+
+@media (max-width:767.98px) {
+    .form-container {
+        form {
+            width: 100%;
+        }
+
+        .form-image {
+            display: none;
+        }
+
+        .p-relative svg {
+            width: 20px;
+        }
+
+        .login-link {
+            svg {
+                height: 18px;
+            }
+        }
+
+        input:not([type="checkbox"]):not([type="radio"]) :focus,
+        input:not([type="checkbox"]):not([type="radio"]),
+        button {
+            height: 40px;
+            font-size: 14px;
+            padding: 4px 10px;
+        }
+
+        label,
+        .login-link {
+            font-size: 13px;
+        }
+    }
+}
+
+@media (max-width:575.98px) {
+    .form-container {
+        .form-content {
+            width: 100%;
+        }
+
+        label,
+        .login-link {
+            font-size: 12px;
+        }
+
+        .login-link {
+            svg {
+                height: 14px;
+            }
+        }
+    }
+
+    @keyframes sway {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(-4px);
+        }
+    }
+
+    .alert {
+        p {
+            font-size: 12px;
+        }
+    }
+}
+
+@media (max-width:400px) {
+
+
+    h3 {
+        font-size: 16px;
+    }
+
+    .table-container {
+        min-width: 100%;
+        overflow-x: auto;
+    }
+
+    table th {
+        font-size: 14px
+    }
+
+    table td {
+        font-size: 12px;
+    }
+
+    .table-container span {
+        font-size: 10px;
+    }
+
+    .btn-page {
+        width: 20px;
+        height: 20px;
+    }
+
+
+
+}
+
+@media (max-width:375.98px) {
+    .form-container {
+        form {
+            padding: 2rem 1rem;
+        }
+    }
+}
