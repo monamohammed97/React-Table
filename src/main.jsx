@@ -6,13 +6,25 @@ import "./media.css";
 import App from "./routes/App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
+<<<<<<< HEAD
+=======
+import { UsersProvider } from "./context/UsersContext.jsx";
+>>>>>>> gh-pages
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
+<<<<<<< HEAD
       <BrowserRouter>
         <App />
       </BrowserRouter>
+=======
+      <UsersProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </UsersProvider>
+>>>>>>> gh-pages
     </AuthProvider>
   </StrictMode>
 );

@@ -13,6 +13,10 @@ import ModalTime from "../components/Modal/ModalTime";
 import TrashIcon from "../assets/TrashIcon";
 import Title from "../components/Title";
 import { classifyRemainingTime } from "../utils/classifyRemainingTime";
+<<<<<<< HEAD
+=======
+import { io } from "socket.io-client";
+>>>>>>> gh-pages
 
 function TablePage() {
   // State to hold the current table data
@@ -253,6 +257,10 @@ function TablePage() {
     }
   }, []);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> gh-pages
   useEffect(() => {
     const time = localStorage.getItem("expiry");
     const nowTime = classifyRemainingTime(Number(time));

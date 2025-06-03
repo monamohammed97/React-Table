@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React from "react";
+=======
+import React, { useEffect } from "react";
+>>>>>>> gh-pages
 import { Routes, Route } from "react-router-dom";
 import { publicRoutes, authRoutes, adminRoutes, userRoutes } from "./routes";
 
@@ -7,7 +11,13 @@ import Unauthorized from "../pages/Unauthorized";
 import NotFound from "../pages/NotFound";
 import PublicRoute from "../layout/PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
+<<<<<<< HEAD
 export default function App() {
+=======
+
+export default function App() {
+
+>>>>>>> gh-pages
   return (
     <Routes>
       {/* Public routes */}
