@@ -13,12 +13,8 @@ function Table({
   handleEdit,
   handleDelete,
 }) {
-<<<<<<< HEAD
- 
-=======
   const { role } = JSON.parse(localStorage.getItem("user"));
 
->>>>>>> gh-pages
   const ActionButtons = React.memo(({ rowData, onEdit, onDelete }) => {
     return (
       <div className="actions-box">
@@ -51,12 +47,9 @@ function Table({
         />
       ),
     };
-<<<<<<< HEAD
 
-    return [...baseColumns, actionColumn];
-=======
+    // return [...baseColumns, actionColumn];
     return role == "admin" ? [...baseColumns, actionColumn] : [...baseColumns];
->>>>>>> gh-pages
   }, [data, handleEdit, handleDelete]);
 
   const {
